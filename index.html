@@ -2,15 +2,25 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <!-- Essential viewport meta tag for responsiveness -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Ensure proper scaling on mobile -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Happy Birthday Sister!</title>
   <style>
-    /* Reset */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { width: 100%; height: 100%; overflow: hidden; background: black; }
+    /* Reset & base styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: black;
+      font-family: Arial, sans-serif;
+    }
 
-    /* Full-screen background video */
+    /* Background Video */
     #bg-video {
       position: fixed;
       top: 0;
@@ -18,10 +28,10 @@
       width: 100vw;
       height: 100vh;
       object-fit: cover;
-      z-index: 0;
+      z-index: 0;  /* behind all content */
     }
 
-    /* Balloon container & styles */
+    /* Balloon Container & Balloons */
     #balloon-container {
       position: fixed;
       width: 100%;
@@ -35,33 +45,40 @@
       bottom: -150px;
       border-radius: 50% 50% 45% 45%;
       opacity: 0.8;
-      animation-name: floatUp;
-      animation-timing-function: ease-in;
-      animation-iteration-count: infinite;
+      animation: floatUp linear infinite;
     }
     @keyframes floatUp {
-      0%   { transform: translateY(0) rotate(0deg); opacity: 0.8; }
-      100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-120vh) rotate(360deg);
+        opacity: 0;
+      }
     }
 
-    /* Corner small videos */
+    /* Corner Videos */
     .corner-video {
       position: fixed;
       object-fit: cover;
       border-radius: 8px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.4);
       z-index: 2;
-    }
-    /* Larger screens - set width with vw and auto height */
-    .corner-video {
+      /* Base size for larger screens */
       width: 100px;
       height: 150px;
     }
-    /* Specific positioning */
-    #corner-video-1 { top: 10px; left: 10px; }
-    #corner-video-2 { bottom: 10px; right: 10px; }
+    #corner-video-1 {
+      top: 10px;
+      left: 10px;
+    }
+    #corner-video-2 {
+      bottom: 10px;
+      right: 10px;
+    }
 
-    /* Bottom message */
+    /* Birthday Message */
     .message {
       position: absolute;
       bottom: 50px;
@@ -77,52 +94,52 @@
     }
     .message h1 {
       color: rgb(218, 213, 169);
-      font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-      font-size: clamp(1.5rem, 5vw, 2.5rem);
+      font-size: 2.5rem;
       margin-bottom: 0.5rem;
     }
     .message h1 .emoji {
       display: inline-block;
-      font-size: clamp(2rem, 8vw, 3rem);
+      font-size: 2rem;
       margin-left: 0.5rem;
       animation: bounce 2s infinite;
     }
     @keyframes bounce {
       0%, 100% { transform: translateY(0); }
-      50%      { transform: translateY(-10px); }
+      50% { transform: translateY(-10px); }
     }
     .message p {
-      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      font-size: 1.2rem;
     }
 
-    /* Floating comments */
+    /* Floating Comments */
     .comment {
       position: absolute;
       white-space: nowrap;
       color: white;
+      font-size: 1.2rem;
       font-family: Arial, sans-serif;
       animation: floatComment 25s linear infinite;
       z-index: 4;
       pointer-events: none;
     }
     @keyframes floatComment {
-      0%   { left: 100%; }
+      0% { left: 100%; }
       100% { left: -100%; }
     }
 
-    /* Mobile responsiveness with media queries */
+    /* Responsive Adjustments */
     @media (max-width: 600px) {
-      /* Adjust background video if needed */
+      /* Adjust background video dimensions if needed */
       #bg-video {
         width: 100%;
         height: 100%;
       }
-      /* Reduce size of corner videos */
+      /* Resize corner videos */
       .corner-video {
         width: 60px;
         height: 90px;
       }
-      /* Adjust the message container */
+      /* Adjust message positioning and typography */
       .message {
         bottom: 20px;
         padding: 0.8rem 1rem;
@@ -133,7 +150,7 @@
       .message p {
         font-size: 1rem;
       }
-      /* Floating comments font size smaller */
+      /* Smaller comment text */
       .comment {
         font-size: 0.9rem;
       }
@@ -154,7 +171,7 @@
   <!-- Balloon Container -->
   <div id="balloon-container"></div>
 
-  <!-- Corner Small Videos -->
+  <!-- Corner Videos -->
   <video class="corner-video" id="corner-video-1" autoplay muted loop playsinline>
     <source src="cj1.mp4" type="video/mp4" />
   </video>
@@ -162,23 +179,23 @@
     <source src="cj2.mp4" type="video/mp4" />
   </video>
 
-  <!-- Birthday Message at Bottom -->
+  <!-- Birthday Message -->
   <div class="message">
     <h1>
-      Happy Birthday Akanksha Didi
+      Happy Birthday Akanksha Didi 
       <span class="emoji">🥳🎉</span>
     </h1>
     <p>Wishing you laughter, joy, and all the happiness you deserve!</p>
   </div>
 
-  <!-- Flowing Comments -->
+  <!-- Floating Comments Container -->
   <div id="comment-container"></div>
 
   <script>
-    // Set viewport dimensions for comment positioning
+    // Get viewport dimensions
     const W = window.innerWidth, H = window.innerHeight;
 
-    // Floating comments
+    // Floating comments messages
     const comments = [
       "Give me Money!",
       "May your dreams come true!",
@@ -190,33 +207,39 @@
       "Cheers to a lifetime of silliness!",
       "Don’t worry, no one’s going to eat your chocolate ..."
     ];
-    function spawnComment(){
+    
+    // Function to spawn a comment
+    function spawnComment() {
       const c = document.createElement('div');
       c.className = 'comment';
       c.innerText = comments[Math.floor(Math.random() * comments.length)];
+      // Position comment randomly vertically (ensure it’s within viewport height)
       c.style.top = Math.random() * (H - 40) + 'px';
       document.body.appendChild(c);
+      // Remove comment after animation duration
       setTimeout(() => c.remove(), 25000);
     }
     setInterval(spawnComment, 3000);
 
-    // Balloon spawn
+    // Balloon spawn configurations
     const colors = ['#FF6B6B', '#FFD93D', '#6BCB77', '#4D96FF', '#FF6EC7'];
-    function spawnBalloon(){
+    function spawnBalloon() {
       const b = document.createElement('div');
       b.className = 'balloon';
       const size = Math.random() * 50 + 50;
       b.style.width  = `${size}px`;
       b.style.height = `${size * 1.2}px`;
-      b.style.left   = `${Math.random() * 100}%`;
+      // Random horizontal positioning
+      b.style.left = `${Math.random() * 100}%`;
       b.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      // Varying animation duration for natural floating effect
       b.style.animationDuration = `${Math.random() * 5 + 5}s`;
       document.getElementById('balloon-container').appendChild(b);
       setTimeout(() => b.remove(), 11000);
     }
     setInterval(spawnBalloon, 800);
 
-    // Unmute background audio upon user interaction
+    // Unmute background audio on first user interaction to comply with autoplay policies
     window.addEventListener('click', () => {
       const audio = document.getElementById('bg-audio');
       if (audio.muted) {
