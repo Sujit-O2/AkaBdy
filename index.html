@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <!-- Ensure proper scaling on mobile -->
+  <!-- Viewport for proper scaling on mobile -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Happy Birthday Sister!</title>
   <style>
@@ -25,10 +25,10 @@
       position: fixed;
       top: 0;
       left: 0;
-      width: 100vw;
-      height: 100vh;
+      width: 100%; 
+      height: 100%;
       object-fit: cover;
-      z-index: 0;  /* behind all content */
+      z-index: -1;
     }
 
     /* Balloon Container & Balloons */
@@ -65,7 +65,6 @@
       border-radius: 8px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.4);
       z-index: 2;
-      /* Base size for larger screens */
       width: 100px;
       height: 150px;
     }
@@ -80,8 +79,8 @@
 
     /* Birthday Message */
     .message {
-      position: absolute;
-      bottom: 50px;
+      position: fixed;
+      bottom: 100px;
       left: 50%;
       transform: translateX(-50%);
       color: #fff;
@@ -105,10 +104,22 @@
     }
     @keyframes bounce {
       0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
+      50%      { transform: translateY(-10px); }
     }
     .message p {
       font-size: 1.2rem;
+    }
+
+    /* Floating Comments Container */
+    #comment-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 4;
     }
 
     /* Floating Comments */
@@ -119,8 +130,6 @@
       font-size: 1.2rem;
       font-family: Arial, sans-serif;
       animation: floatComment 25s linear infinite;
-      z-index: 4;
-      pointer-events: none;
     }
     @keyframes floatComment {
       0% { left: 100%; }
@@ -129,19 +138,16 @@
 
     /* Responsive Adjustments */
     @media (max-width: 600px) {
-      /* Adjust background video dimensions if needed */
       #bg-video {
         width: 100%;
         height: 100%;
       }
-      /* Resize corner videos */
       .corner-video {
         width: 60px;
         height: 90px;
       }
-      /* Adjust message positioning and typography */
       .message {
-        bottom: 20px;
+        bottom: 80px;
         padding: 0.8rem 1rem;
       }
       .message h1 {
@@ -150,7 +156,6 @@
       .message p {
         font-size: 1rem;
       }
-      /* Smaller comment text */
       .comment {
         font-size: 0.9rem;
       }
@@ -182,7 +187,7 @@
   <!-- Birthday Message -->
   <div class="message">
     <h1>
-      Happy Birthday Akanksha Didi 
+      Happy Birthday Akanksha Didi
       <span class="emoji">🥳🎉</span>
     </h1>
     <p>Wishing you laughter, joy, and all the happiness you deserve!</p>
@@ -192,36 +197,33 @@
   <div id="comment-container"></div>
 
   <script>
-    // Get viewport dimensions
-    const W = window.innerWidth, H = window.innerHeight;
-
-    // Floating comments messages
-    const comments = [
-      "Give me Money!",
-      "May your dreams come true!",
-      "Keep shining always!",
-      "Happy Birthday Nani",
-      "Where is my Kurkure?",
-      "Party hard and smile more!",
-      "Be A Cute Sister!",
-      "Cheers to a lifetime of silliness!",
-      "Don’t worry, no one’s going to eat your chocolate ..."
-    ];
-    
-    // Function to spawn a comment
+    // Updated spawnComment function using the dedicated comment container
     function spawnComment() {
+      const container = document.getElementById('comment-container');
+      const H = container.clientHeight;
       const c = document.createElement('div');
       c.className = 'comment';
+      const comments = [
+        "Give me Money!",
+        "May your dreams come true!",
+        "Keep shining always!",
+        "Happy Birthday Nani",
+        "Where is my Kurkure?",
+        "Party hard and smile more!",
+        "Be A Cute Sister!",
+        "Cheers to a lifetime of silliness!",
+        "Don’t worry, no one’s going to eat your chocolate ..."
+      ];
       c.innerText = comments[Math.floor(Math.random() * comments.length)];
-      // Position comment randomly vertically (ensure it’s within viewport height)
+      // Set a random top position within the container
       c.style.top = Math.random() * (H - 40) + 'px';
-      document.body.appendChild(c);
-      // Remove comment after animation duration
+      container.appendChild(c);
+      // Remove comment after 25 seconds
       setTimeout(() => c.remove(), 25000);
     }
     setInterval(spawnComment, 3000);
 
-    // Balloon spawn configurations
+    // Spawn balloons
     const colors = ['#FF6B6B', '#FFD93D', '#6BCB77', '#4D96FF', '#FF6EC7'];
     function spawnBalloon() {
       const b = document.createElement('div');
@@ -229,17 +231,15 @@
       const size = Math.random() * 50 + 50;
       b.style.width  = `${size}px`;
       b.style.height = `${size * 1.2}px`;
-      // Random horizontal positioning
-      b.style.left = `${Math.random() * 100}%`;
+      b.style.left   = `${Math.random() * 100}%`;
       b.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-      // Varying animation duration for natural floating effect
       b.style.animationDuration = `${Math.random() * 5 + 5}s`;
       document.getElementById('balloon-container').appendChild(b);
       setTimeout(() => b.remove(), 11000);
     }
     setInterval(spawnBalloon, 800);
 
-    // Unmute background audio on first user interaction to comply with autoplay policies
+    // Unmute audio on first click
     window.addEventListener('click', () => {
       const audio = document.getElementById('bg-audio');
       if (audio.muted) {
