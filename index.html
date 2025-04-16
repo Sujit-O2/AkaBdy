@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Birthday Sister!</title>
+  <style>
+    /* Reset */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: black; }
+    
+    /* Full-screen background video */
+    #bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+    
+    /* Balloon container & styles */
+    #balloon-container {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 1;
+    }
+    .balloon {
+      position: absolute;
+      bottom: -150px;
+      border-radius: 50% 50% 45% 45%;
+      opacity: 0.8;
+      animation-name: floatUp;
+      animation-timing-function: ease-in;
+      animation-iteration-count: infinite;
+    }
+    @keyframes floatUp {
+      0%   { transform: translateY(0)    rotate(0deg);   opacity: 0.8; }
+      100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
+    }
+    
+    /* Corner small videos */
+    .corner-video {
+      position: fixed;
+      width: 100px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      z-index: 2;
+    }
+    /* Top left corner */
+    #corner-video-1 {
+      top: 10px;
+      left: 10px;
+    }
+    /* Bottom right corner */
+    #corner-video-2 {
+      bottom: 10px;
+      right: 10px;
+    }
+    
+    /* Bottom message */
+    .message {
+      position: absolute;
+      bottom: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: transparent;
+      color: #fff;
+      text-align: center;
+      z-index: 3;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+      padding: 1rem 2rem;
+      border-radius: 8px;
+    }
+    .message h1 {
+      color: rgb(218, 213, 169);
+      font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+      
+      font-size: 40px;
+      margin-bottom: 0.5rem;
+    }
+    .message h1 .emoji {
+      display: inline-block;
+      font-size: 3rem;
+      margin-left: 0.5rem;
+      animation: bounce 2s infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-10px); }
+    }
+    .message p {
+      font-size: 1.2rem;
+    }
+    
+    /* Floating comments */
+    .comment {
+      position: absolute;
+      white-space: nowrap;
+      color: white;
+      font-size: 1.2rem;
+      font-family: Arial, sans-serif;
+      animation: floatComment 25s linear infinite;
+      z-index: 4;
+      pointer-events: none;
+    }
+    @keyframes floatComment {
+      0%   { left: 100%; }
+      100% { left: -100%; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Background Video -->
+  <video id="bg-video" autoplay muted loop playsinline>
+    <source src="bdy.mp4" type="video/mp4" />
+  </video>
+  
+  <!-- Background Audio (initially muted) -->
+  <audio id="bg-audio" loop muted>
+    <source src="bg.mp3" type="audio/mpeg" />
+  </audio>
+  
+  <!-- Balloon Container -->
+  <div id="balloon-container"></div>
+  
+  <!-- Corner Small Videos -->
+  <video class="corner-video" id="corner-video-1" autoplay muted loop playsinline>
+    <source src="cj1.mp4" type="video/mp4" />
+  </video>
+  <video class="corner-video" id="corner-video-2" autoplay muted loop playsinline>
+    <source src="cj2.mp4" type="video/mp4" />
+  </video>
+  
+  <!-- Birthday Message at Bottom -->
+  <div class="message">
+    <h1>
+      Happy Birthday Akanksha Didi
+      <span class="emoji">🥳🎉</span>
+    </h1>
+    <p>Wishing you laughter, joy, and all the happiness you deserve!</p>
+  </div>
+  
+  <!-- Flowing Comments -->
+  <div id="comment-container"></div>
+  
+  <script>
+    const W = window.innerWidth, H = window.innerHeight;
+    
+    // Floating comments
+    const comments = [
+      "Give me Money!",
+      "May your dreams come true!",
+      "Keep shining always!",
+      "Happy Birthday Nani",
+      "Where is my Kurkure?",
+      "Party hard and smile more!",
+      "Be A Cute Sister!",
+      "cheers to a lifetime of silliness!",
+      "Don’t worry, no one’s going to eat your chocolate ..."
+
+    ];
+    function spawnComment(){
+      const c = document.createElement('div');
+      c.className = 'comment';
+      c.innerText = comments[Math.floor(Math.random() * comments.length)];
+      c.style.top = Math.random() * (H - 40) + 'px';
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 25000);
+    }
+    setInterval(spawnComment, 2000);
+    
+    // Balloon spawn
+    const colors = ['#FF6B6B', '#FFD93D', '#6BCB77', '#4D96FF', '#FF6EC7'];
+    function spawnBalloon(){
+      const b = document.createElement('div');
+      b.className = 'balloon';
+      const size = Math.random() * 50 + 50;
+      b.style.width  = `${size}px`;
+      b.style.height = `${size * 1.2}px`;
+      b.style.left   = `${Math.random() * 100}%`;
+      b.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      b.style.animationDuration = `${Math.random() * 5 + 5}s`;
+      document.getElementById('balloon-container').appendChild(b);
+      setTimeout(() => b.remove(), 11000);
+    }
+    setInterval(spawnBalloon, 800);
+    
+    // Unmute background audio upon user interaction
+    window.addEventListener('click', () => {
+      const audio = document.getElementById('bg-audio');
+      if (audio.muted) {
+        audio.muted = false;
+        audio.play();
+      }
+    }, { once: true });
+  </script>
+</body>
+</html>
